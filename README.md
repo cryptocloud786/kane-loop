@@ -8,7 +8,7 @@ Chrome browser, parses Kane's NDJSON stream, and turns every red run into a prom
 When the agent saves a fix, kane-loop re-runs Kane automatically. The loop ends only when every flow is green.
 
 - **Live app:** https://cryptocloud786.github.io/kane-loop/
-- **Demo video (3 min):** see the submission (link also below once uploaded)
+- **Demo video (2:55, unlisted):** https://youtu.be/ineJyRCLt6o
 - **Kane run evidence:** [`evidence/`](evidence/) (raw Kane NDJSON for every run + the loop timeline), and the public Kane Test Manager links in [`EVIDENCE.md`](EVIDENCE.md)
 
 Built for the TestMu AI **Kane CLI Online Hackathon** (Lane 1 "apps that verify themselves" + Lane 2 "kane-watch").
