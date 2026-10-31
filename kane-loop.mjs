@@ -112,6 +112,24 @@ function summarize(r) {
   };
 }
 
+// When Kane fails without a value-level check (e.g. "stuck"), read what the page actually shows
+// from the CDP browser Kane just used, so the agent sees the evidence without opening the run.
+async function pageText() {
+  if (!cfg.cdp) return '';
+  try {
+    const targets = await (await fetch(`${cfg.cdp}/json/list`)).json();
+    const page = targets.filter(t => t.type === 'page' && /^https?:/.test(t.url)).pop();
+    if (!page) return '';
+    return await new Promise(resolve => {
+      const ws = new WebSocket(page.webSocketDebuggerUrl);
+      const timer = setTimeout(() => { try { ws.close(); } catch {} resolve(''); }, 4000);
+      ws.onopen = () => ws.send(JSON.stringify({ id: 1, method: 'Runtime.evaluate', params: { expression: 'document.body.innerText', returnByValue: true } }));
+      ws.onmessage = m => { const d = JSON.parse(m.data); if (d.id === 1) { clearTimeout(timer); ws.close(); resolve(String(d.result?.result?.value || '').slice(0, 4000)); } };
+      ws.onerror = () => { clearTimeout(timer); resolve(''); };
+    });
+  } catch { return ''; }
+}
+
 function gitDiff() {
   try { return execSync(`git -C "${ROOT}" diff HEAD -- ${cfg.app}`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).slice(0, 6000); } catch { return ''; }
 }
@@ -133,6 +151,7 @@ function writeFeedback(results, iter) {
     }
     if (r.summary) lines.push('What Kane did:', '', '```', r.summary, '```', '');
     if (r.final_state) lines.push('Final page state Kane extracted:', '', '```json', JSON.stringify(r.final_state, null, 2), '```', '');
+    if (r.page_text) lines.push('What the page showed when Kane stopped (read from the browser Kane used):', '', '```', r.page_text, '```', '');
     if (r.test_url) lines.push(`Kane run (video + steps): ${r.test_url}`, '');
   }
   const diff = gitDiff();
@@ -151,6 +170,7 @@ async function verify(iter = 1) {
   for (const f of flows) {
     log(`▶ ${f.title}`);
     const s = summarize(await runKane(f));
+    if (s.status !== 'passed' && !s.checks.some(c => !c.pass)) s.page_text = await pageText();
     results.push(s);
     const tag = s.status === 'passed' ? C.green('● PASS') : C.red('● FAIL');
     log(`${tag} ${f.title} ${C.dim(`(${s.duration_s ?? '?'}s, ${s.credits ? s.credits.toFixed(1) : '?'} credits)`)}`);
@@ -158,7 +178,7 @@ async function verify(iter = 1) {
     if (s.status !== 'passed') log(C.red(`   ${s.reason}`));
   }
   const green = results.every(r => r.status === 'passed');
-  const entry = { ts: new Date().toISOString(), iteration: iter, green, results: results.map(({ steps, ...r }) => r) };
+  const entry = { ts: new Date().toISOString(), iteration: iter, green, results: results.map(({ steps, page_text, ...r }) => r) };
   fs.writeFileSync(path.join(ROOT, '.kane/last.json'), JSON.stringify(entry, null, 2));
   fs.appendFileSync(path.join(ROOT, 'evidence/loop-log.ndjson'), JSON.stringify(entry) + '\n');
   if (!green) { writeFeedback(results, iter); log(C.yellow('Feedback for the agent written to .kane/AGENT_FEEDBACK.md')); }

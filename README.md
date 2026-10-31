@@ -25,8 +25,8 @@ Built for the TestMu AI **Kane CLI Online Hackathon** (Lane 1 "apps that verify 
 | 6 | The save fired Kane again on both flows | 🟢 both green, total 1050.00 = 350.01 + 350.00 + 349.99 |
 
 Honest note: Kane's verdict on the red run was "stuck" rather than a named value mismatch, so the agent had to open
-Kane's run to see the 1050.01. That is now a kane-loop TODO: attach the final page text to the feedback when Kane
-returns no checks. The bug itself was not planted. It was a genuine rounding bug in the agent's first version, and the spec claim
+Kane's run to see the 1050.01. So the agent then taught kane-loop to do that itself: when Kane fails without a
+value-level check, kane-loop now reads the page text from the browser Kane just used and puts it in the feedback. The bug itself was not planted. It was a genuine rounding bug in the agent's first version, and the spec claim
 "per-person amounts always add up to the bill total" is exactly the kind of thing a human eyeballing the UI misses.
 
 ## How it works
