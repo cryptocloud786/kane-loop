@@ -1,0 +1,7 @@
+#!/bin/sh
+# Block a commit that touches app/ unless Kane CLI says every flow is green.
+# Install: git config core.hooksPath hooks
+if git diff --cached --name-only | grep -q '^app/'; then
+  echo "kane-loop: app/ changed, asking Kane CLI to verify before commit..."
+  node kane-loop.mjs verify || { echo "kane-loop: Kane is red. Read .kane/AGENT_FEEDBACK.md, fix, and commit again."; exit 1; }
+fi

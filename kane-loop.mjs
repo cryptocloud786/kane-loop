@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // kane-loop: close the loop between an AI coding agent and Kane CLI.
 //
+//   node kane-loop.mjs serve             serve the app on http://localhost:8080/
 //   node kane-loop.mjs verify            run every flow in kane/flows once (exit 1 on any red)
 //   node kane-loop.mjs watch             verify, then re-verify on every save in app/ until all green
 //   node kane-loop.mjs watch --agent-cmd "claude -p"
@@ -138,6 +139,8 @@ function writeFeedback(results, iter) {
   if (diff) lines.push('## Your uncommitted changes since the last green commit', '', '```diff', diff, '```', '');
   const md = lines.join('\n');
   fs.writeFileSync(path.join(ROOT, '.kane/AGENT_FEEDBACK.md'), md);
+  fs.mkdirSync(path.join(ROOT, 'evidence/feedback'), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, 'evidence/feedback', `${stamp()}-iteration-${iter}-AGENT_FEEDBACK.md`), md);
   return md;
 }
 
@@ -186,6 +189,7 @@ async function main() {
   const srv = await serve();
   log(`serving ./${cfg.app} on http://localhost:${cfg.port}/ ${srv ? '' : '(already running)'}`);
   let code = 0;
+  if (cmd === 'serve') { log(C.bold(`SplitSure is running: open http://localhost:${cfg.port}/  (Ctrl+C to stop)`)); return; }
   if (cmd === 'verify') {
     code = (await verify()) ? 0 : 1;
   } else if (cmd === 'watch') {
@@ -197,7 +201,7 @@ async function main() {
       else { log(C.yellow(`🔴 waiting for the agent to patch ./${cfg.app} (watching for saves)…`)); const f = await waitForSave(); log(`saved: ${f}; re-running Kane`); }
     }
   } else {
-    console.log('usage: node kane-loop.mjs verify | watch [--agent-cmd "<agent cli>"] [--flow <id>]');
+    console.log('usage: node kane-loop.mjs serve | verify | watch [--agent-cmd "<agent cli>"] [--flow <id>]');
   }
   if (srv) srv.close();
   process.exit(code);

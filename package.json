@@ -1,0 +1,14 @@
+{
+  "name": "kane-loop",
+  "version": "0.1.0",
+  "description": "SplitSure bill splitter + kane-loop: an AI coding agent that cannot ship until Kane CLI says green.",
+  "license": "MIT",
+  "scripts": {
+    "start": "node kane-loop.mjs serve",
+    "verify": "node kane-loop.mjs verify",
+    "watch": "node kane-loop.mjs watch",
+    "loop": "node kane-loop.mjs watch --agent-cmd \"claude -p --permission-mode acceptEdits\"",
+    "test:unit": "node test/split.test.cjs"
+  },
+  "engines": { "node": ">=20" }
+}
