@@ -26,7 +26,20 @@ Built for the TestMu AI **Kane CLI Online Hackathon** (Lane 1 "apps that verify 
 
 Honest note: Kane's verdict on the red run was "stuck" rather than a named value mismatch, so the agent had to open
 Kane's run to see the 1050.01. So the agent then taught kane-loop to do that itself: when Kane fails without a
-value-level check, kane-loop now reads the page text from the browser Kane just used and puts it in the feedback. The bug itself was not planted. It was a genuine rounding bug in the agent's first version, and the spec claim
+value-level check, kane-loop now reads the page text from the browser Kane just used and puts it in the feedback. The bug itself was not planted.
+
+## Round 2: spec first, then the feature (real run, 31 Oct 2026)
+
+| # | What happened | Kane verdict |
+|---|---|---|
+| 1 | SPEC v1.1 claim 7 ("remove an item and every total updates") and flow 03 committed **before** any code (commit 8786ec5) | |
+| 2 | `kane-loop watch`: flows 01 and 02 still green, flow 03... | 🔴 `confirmed_product_bug`: "there was no visible action to delete it" (feedback now carries the page text) |
+| 3 | Agent adds a Remove button per item and saves | |
+| 4 | Kane re-runs | 🔴 `stuck.dag_cycle`: the "Shared by" boxes started **pre-ticked**, so Kane's "tick both" clicks un-ticked people and Cake got added twice. A real UX trap a human tester could hit too |
+| 5 | Agent makes the boxes start unticked, adds an inline "tick at least one person" error, saves | |
+| 6 | Kane re-runs all three flows | 🟢 300.00 / 300.00 / 600.00, "Cake is no longer listed" |
+
+Full table with every Kane run link: [`EVIDENCE.md`](EVIDENCE.md). It was a genuine rounding bug in the agent's first version, and the spec claim
 "per-person amounts always add up to the bill total" is exactly the kind of thing a human eyeballing the UI misses.
 
 ## How it works
