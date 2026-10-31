@@ -33,7 +33,7 @@ value-level check, kane-loop now reads the page text from the browser Kane just 
 
 | # | What happened | Kane verdict |
 |---|---|---|
-| 1 | SPEC v1.1 claim 7 ("remove an item and every total updates") and flow 03 committed **before** any code (commit 8786ec5) | |
+| 1 | SPEC v1.1 claim 7 ("remove an item and every total updates") and flow 03 committed **before** any code (commit 9abb2ff) | |
 | 2 | `kane-loop watch`: flows 01 and 02 still green, flow 03... | 🔴 `confirmed_product_bug`: "there was no visible action to delete it" (feedback now carries the page text) |
 | 3 | Agent adds a Remove button per item and saves | |
 | 4 | Kane re-runs | 🔴 `stuck.dag_cycle`: the "Shared by" boxes started **pre-ticked**, so Kane's "tick both" clicks un-ticked people and Cake got added twice. A real UX trap a human tester could hit too |

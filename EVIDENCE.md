@@ -36,9 +36,9 @@ Every row is a real `kane-cli run --agent` execution (Kane CLI 0.10.0, Chromium 
 
 ## What each red run led to
 
-- **Round 1, iteration 1, flow 02 (red):** SplitSure v1 showed a Bill total of **1050.01** for a 1000.00 bill with 5% tax, so Kane could not pass "total is exactly 1050.00" and stopped (`stuck.ap_stuck`). The agent patched `app/split.js` (commit 4f19c0d); the save triggered iteration 2: green. Follow-up commit 5070c4c taught kane-loop to attach the page text when Kane returns no value-level check.
+- **Round 1, iteration 1, flow 02 (red):** SplitSure v1 showed a Bill total of **1050.01** for a 1000.00 bill with 5% tax, so Kane could not pass "total is exactly 1050.00" and stopped (`stuck.ap_stuck`). The agent patched `app/split.js` (commit 2f5ffb7); the save triggered iteration 2: green. Follow-up commit 24eb787 taught kane-loop to attach the page text when Kane returns no value-level check.
 - **Round 2, iteration 1, flow 03 (red):** flow written before the feature; Kane reported `assertion_error.confirmed_product_bug` (no way to remove Cake). The feedback included the page text. The agent added a Remove button per item.
-- **Round 2, iteration 2, flow 03 (red):** Kane hit `stuck.dag_cycle`: the Shared-by boxes started pre-ticked, so clicking a name to mean "shared by" un-ticked it and Cake was added twice. A real UX trap. The agent made the boxes start unticked with an inline error (commit e472320).
+- **Round 2, iteration 2, flow 03 (red):** Kane hit `stuck.dag_cycle`: the Shared-by boxes started pre-ticked, so clicking a name to mean "shared by" un-ticked it and Cake was added twice. A real UX trap. The agent made the boxes start unticked with an inline error (commit 9769622).
 - **Round 2, iteration 3:** all three flows green.
 - **Round 3:** the same three flows, run by `KANE_LOOP_URL=https://cryptocloud786.github.io/kane-loop/ node kane-loop.mjs verify` against the deployed site: all green.
 
