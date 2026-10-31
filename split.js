@@ -12,11 +12,18 @@ function splitBill(people, items, taxPct, tipPct) {
     let rem = cents - base * who.length;
     for (const p of who) { sub[p] += base + (rem > 0 ? 1 : 0); rem--; }
   }
+  // Fix from Kane run #1 (flow 02): rounding tax+tip per person drifted the bill by a paisa
+  // (3 x 16.67 = 50.01 on a 50.00 charge). Round the bill once, then hand out the extra
+  // with the largest-remainder method so the rows always sum to the bill total.
   const rate = (Number(taxPct) || 0) / 100 + (Number(tipPct) || 0) / 100;
-  const rows = people.map(p => {
-    const extra = Math.round(sub[p] * rate);
-    return { person: p, items: sub[p], extra, owes: sub[p] + extra };
-  });
+  const itemsTotal = people.reduce((s, p) => s + sub[p], 0);
+  const extraTotal = Math.round(itemsTotal * rate);
+  const exact = people.map(p => itemsTotal ? sub[p] * extraTotal / itemsTotal : 0);
+  const extras = exact.map(Math.floor);
+  let left = extraTotal - extras.reduce((a, b) => a + b, 0);
+  exact.map((x, i) => [x - Math.floor(x), i]).sort((a, b) => b[0] - a[0])
+    .forEach(([, i]) => { if (left > 0) { extras[i]++; left--; } });
+  const rows = people.map((p, i) => ({ person: p, items: sub[p], extra: extras[i], owes: sub[p] + extras[i] }));
   const total = rows.reduce((s, r) => s + r.owes, 0);
   return { rows, total };
 }
