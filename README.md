@@ -39,7 +39,9 @@ value-level check, kane-loop now reads the page text from the browser Kane just 
 | 5 | Agent makes the boxes start unticked, adds an inline "tick at least one person" error, saves | |
 | 6 | Kane re-runs all three flows | 🟢 300.00 / 300.00 / 600.00, "Cake is no longer listed" |
 
-Full table with every Kane run link: [`EVIDENCE.md`](EVIDENCE.md). It was a genuine rounding bug in the agent's first version, and the spec claim
+Then `KANE_LOOP_URL=https://cryptocloud786.github.io/kane-loop/ node kane-loop.mjs verify` ran all three flows against the deployed GitHub Pages build: 🟢 3/3.
+
+Full table with every Kane run link (16 Kane runs, 4 red): [`EVIDENCE.md`](EVIDENCE.md). It was a genuine rounding bug in the agent's first version, and the spec claim
 "per-person amounts always add up to the bill total" is exactly the kind of thing a human eyeballing the UI misses.
 
 ## How it works

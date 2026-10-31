@@ -26,10 +26,21 @@ Every row is a real `kane-cli run --agent` execution (Kane CLI 0.10.0, Chromium 
 | 3 | Three-way split with tax never loses or invents a paisa | 🟢 PASS | the Bill total is exactly 1050.00. -> page shows 1050.00; the three Owes amounts for Asha, Ben and Chen add up to exactly the Bill total of 1050.00. -> page shows 1050.00 | 13.3 | [open](https://test-manager.lambdatest.com/projects/01M6954SJVZC8RPJF9XNFJ8S1E/test-cases/01M697NK48D4DWRZAF744PNR7K/dashboard/share/US_1MBQZQGCRWQJ776RDKQMHXPHYT5YXSNGUFQUQHMBDFCMEQVJTO60N9KJZ16IBVWE?type=summary&agentView=true&fqdn=summary-page) |
 | 3 | Removing a mistaken item updates every total | 🟢 PASS | The Owes column shows 300.00 for Asha. -> page shows 300.00; The Owes column shows 300.00 for Ben. -> page shows 300.00; The Bill total is 600.00. -> page shows 600.00; Cake is no longer listed. -> page shows false | 26.5 | [open](https://test-manager.lambdatest.com/projects/01M6954SJVZC8RPJF9XNFJ8S1E/test-cases/01M697SSQZAP3HHTXDBKSQWG6H/dashboard/share/US_923L7AC39FSMY9DHJ7WQF3Z7R7UEXA8OUJJMDTZRAYKVQDP7A0JCNG8NAW93LIUS?type=summary&agentView=true&fqdn=summary-page) |
 
+## Round 3: `kane-loop verify` against the live GitHub Pages build (https://cryptocloud786.github.io/kane-loop/)
+
+| Iteration | Flow | Verdict | What Kane checked on the page | Credits | Kane run |
+|---|---|---|---|---|---|
+| 1 | Two friends, uneven order, 10% tip | 🟢 PASS | the Owes column shows 330.00 for Asha -> page shows 330.00; the Bill total is 770.00 -> page shows 770.00; the Owes column shows 440.00 for Ben -> page shows 440.00 | 26.6 | [open](https://test-manager.lambdatest.com/projects/01M6954SJVZC8RPJF9XNFJ8S1E/test-cases/01M6985AB8PMRH6174MF11W2E1/dashboard/share/US_777M8FBTMOMDE45OXJHL1MA5JBO9ED84FKG3W66EWCK7DGB6PRIM08JH15P8B426?type=summary&agentView=true&fqdn=summary-page) |
+| 1 | Three-way split with tax never loses or invents a paisa | 🟢 PASS | the Bill total is exactly 1050.00 -> page shows 1050.00; the three Owes amounts for Asha, Ben and Chen add up to exactly the Bill total of 1050.00 -> page shows 1050.00 | 23.1 | [open](https://test-manager.lambdatest.com/projects/01M6954SJVZC8RPJF9XNFJ8S1E/test-cases/01M6989HD83XEVDAR1CQZRTJ42/dashboard/share/US_MRNJ32U5VYGZHA5IRXADLOIZ860G1KIH10LEQ6PNIKNCA69SRMD54GJHBSQLDMUE?type=summary&agentView=true&fqdn=summary-page) |
+| 1 | Removing a mistaken item updates every total | 🟢 PASS | The Owes column shows 300.00 for Asha. -> page shows 300.00; The Owes column shows 300.00 for Ben. -> page shows 300.00; The Bill total is 600.00. -> page shows 600.00; Cake is no longer listed. -> page shows false | 18.9 | [open](https://test-manager.lambdatest.com/projects/01M6954SJVZC8RPJF9XNFJ8S1E/test-cases/01M698DZ9TNB6BB09WFCVGR6RT/dashboard/share/US_DH4T7VHBUQDJOCJPRR6TPVZLXVUWCTUY33A7514PIB59N16Y4CMU65LE7AC2L8ZV?type=summary&agentView=true&fqdn=summary-page) |
+
 ## What each red run led to
 
 - **Round 1, iteration 1, flow 02 (red):** SplitSure v1 showed a Bill total of **1050.01** for a 1000.00 bill with 5% tax, so Kane could not pass "total is exactly 1050.00" and stopped (`stuck.ap_stuck`). The agent patched `app/split.js` (commit 4f19c0d); the save triggered iteration 2: green. Follow-up commit 5070c4c taught kane-loop to attach the page text when Kane returns no value-level check.
 - **Round 2, iteration 1, flow 03 (red):** flow written before the feature; Kane reported `assertion_error.confirmed_product_bug` (no way to remove Cake). The feedback included the page text. The agent added a Remove button per item.
 - **Round 2, iteration 2, flow 03 (red):** Kane hit `stuck.dag_cycle`: the Shared-by boxes started pre-ticked, so clicking a name to mean "shared by" un-ticked it and Cake was added twice. A real UX trap. The agent made the boxes start unticked with an inline error (commit e472320).
 - **Round 2, iteration 3:** all three flows green.
+- **Round 3:** the same three flows, run by `KANE_LOOP_URL=https://cryptocloud786.github.io/kane-loop/ node kane-loop.mjs verify` against the deployed site: all green.
+
+Totals: 16 Kane runs across 6 verification passes, 4 red, about 373 Kane credits.
 
