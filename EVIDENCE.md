@@ -42,5 +42,5 @@ Every row is a real `kane-cli run --agent` execution (Kane CLI 0.10.0, Chromium 
 - **Round 2, iteration 3:** all three flows green.
 - **Round 3:** the same three flows, run by `KANE_LOOP_URL=https://cryptocloud786.github.io/kane-loop/ node kane-loop.mjs verify` against the deployed site: all green.
 
-Totals: 16 Kane runs across 6 verification passes, 4 red, about 373 Kane credits.
+Totals: 16 Kane runs across 6 verification passes, 3 red, about 373 Kane credits.
 
