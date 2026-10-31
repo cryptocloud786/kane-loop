@@ -1,0 +1,4 @@
+# Removing a mistaken item updates every total
+Add a person named Asha and a person named Ben. Add an item called Pizza with price 600 shared by both.
+Add an item called Cake with price 200 shared by both. Then remove the Cake item from the list of items.
+Verify that Cake is no longer listed, the Owes column shows 300.00 for Asha and 300.00 for Ben, and the Bill total is 600.00.

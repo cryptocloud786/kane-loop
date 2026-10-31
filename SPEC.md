@@ -7,4 +7,7 @@
 5. **Money is exact.** Amounts are shown to 2 decimals and the per-person amounts always add up to exactly the bill total, which is (sum of items) x (1 + tax% + tip%), rounded once. No paisa or cent is ever lost or invented.
 6. A copy-ready settle-up message lists who owes what.
 
-Each numbered claim above is covered by a plain-English Kane CLI flow in `kane/flows/`.
+Each numbered claim is covered by a plain-English Kane CLI flow in `kane/flows/`.
+
+## v1.1
+7. A user can remove an item they added by mistake, and every total updates immediately.
