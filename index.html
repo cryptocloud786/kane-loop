@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SplitSure: fair bill splitting, verified by Kane</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Split<span>Sure</span></h1>
+  <p class="tag">Split a bill item by item. Every release is checked by Kane CLI before it ships.</p>
+</header>
+<main>
+  <section class="card" id="people-card">
+    <h2>1. Who's at the table?</h2>
+    <form id="person-form" autocomplete="off">
+      <label for="person-name">Name</label>
+      <input id="person-name" name="person" placeholder="e.g. Asha" required>
+      <button type="submit" id="add-person">Add person</button>
+    </form>
+    <ul id="people" aria-label="People"></ul>
+  </section>
+
+  <section class="card" id="items-card">
+    <h2>2. What did you order?</h2>
+    <form id="item-form" autocomplete="off">
+      <label for="item-name">Item</label>
+      <input id="item-name" placeholder="e.g. Pizza" required>
+      <label for="item-price">Price</label>
+      <input id="item-price" type="number" min="0" step="0.01" placeholder="600" required>
+      <fieldset id="sharers"><legend>Shared by</legend><p class="hint">Add people first.</p></fieldset>
+      <button type="submit" id="add-item">Add item</button>
+    </form>
+    <ul id="items" aria-label="Items"></ul>
+  </section>
+
+  <section class="card" id="extras-card">
+    <h2>3. Tax and tip</h2>
+    <div class="row">
+      <label for="tax">Tax %</label><input id="tax" type="number" min="0" step="0.1" value="0">
+      <label for="tip">Tip %</label><input id="tip" type="number" min="0" step="0.1" value="0">
+    </div>
+  </section>
+
+  <section class="card result" id="result-card">
+    <h2>4. Who owes what</h2>
+    <table id="totals" aria-label="Totals per person">
+      <thead><tr><th>Person</th><th>Items</th><th>Tax + tip</th><th>Owes</th></tr></thead>
+      <tbody></tbody>
+      <tfoot><tr><th colspan="3">Bill total</th><th id="grand-total">0.00</th></tr></tfoot>
+    </table>
+    <p id="check" class="check"></p>
+    <button id="copy" type="button">Copy settle-up message</button>
+    <pre id="settle" aria-label="Settle-up message"></pre>
+  </section>
+</main>
+<footer>
+  <p>Built by an AI coding agent. Verified in a real browser by <a href="https://www.testmuai.com/kane-cli/">Kane CLI</a>. <a href="https://github.com/cryptocloud786/kane-loop">Source and Kane run logs</a></p>
+</footer>
+<script src="split.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
