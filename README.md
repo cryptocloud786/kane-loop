@@ -13,7 +13,7 @@ When the agent saves a fix, kane-loop re-runs Kane automatically. The loop ends 
 
 Built for the TestMu AI **Kane CLI Online Hackathon** (Lane 1 "apps that verify themselves" + Lane 2 "kane-watch").
 
-## The moment the loop closed (real run, 31 Oct 2026)
+## Round 1: the loop closes on a real bug (real run, 31 Oct 2026)
 
 | # | What happened | Kane verdict |
 |---|---|---|
@@ -26,7 +26,8 @@ Built for the TestMu AI **Kane CLI Online Hackathon** (Lane 1 "apps that verify 
 
 Honest note: Kane's verdict on the red run was "stuck" rather than a named value mismatch, so the agent had to open
 Kane's run to see the 1050.01. So the agent then taught kane-loop to do that itself: when Kane fails without a
-value-level check, kane-loop now reads the page text from the browser Kane just used and puts it in the feedback. The bug itself was not planted.
+value-level check, kane-loop now reads the page text from the browser Kane just used and puts it in the feedback. The bug itself was not planted: it was a genuine rounding bug in the agent's first version, and the spec claim
+"per-person amounts always add up to the bill total" is exactly the kind of thing a human eyeballing the UI misses.
 
 ## Round 2: spec first, then the feature (real run, 31 Oct 2026)
 
@@ -41,8 +42,7 @@ value-level check, kane-loop now reads the page text from the browser Kane just 
 
 Then `KANE_LOOP_URL=https://cryptocloud786.github.io/kane-loop/ node kane-loop.mjs verify` ran all three flows against the deployed GitHub Pages build: 🟢 3/3.
 
-Full table with every Kane run link (16 Kane runs, 3 red): [`EVIDENCE.md`](EVIDENCE.md). It was a genuine rounding bug in the agent's first version, and the spec claim
-"per-person amounts always add up to the bill total" is exactly the kind of thing a human eyeballing the UI misses.
+Full table with every Kane run link (16 Kane runs, 3 red): [`EVIDENCE.md`](EVIDENCE.md).
 
 ## How it works
 
