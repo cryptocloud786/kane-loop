@@ -1,0 +1,4 @@
+# Two friends, uneven order, 10% tip
+Add a person named Asha and a person named Ben. Add an item called Pizza with price 600 shared by both.
+Add an item called Soda with price 100 shared only by Ben (uncheck Asha before adding it). Set Tip % to 10.
+Verify that the Owes column shows 330.00 for Asha and 440.00 for Ben, and the Bill total is 770.00.

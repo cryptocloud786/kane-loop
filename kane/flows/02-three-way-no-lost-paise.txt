@@ -1,0 +1,4 @@
+# Three-way split with tax never loses or invents a paisa
+Add three people named Asha, Ben and Chen. Add an item called Thali with price 1000 shared by all three.
+Set Tax % to 5. Verify that the Bill total is exactly 1050.00, and that the three Owes amounts
+for Asha, Ben and Chen add up to exactly the Bill total of 1050.00.

@@ -1,0 +1,7 @@
+{
+  "app": "app",
+  "port": 8080,
+  "flows": "kane/flows",
+  "maxIterations": 4,
+  "timeout": 600
+}
