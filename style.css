@@ -10,3 +10,5 @@ ul{margin:10px 0 0;padding-left:18px}.who{color:#777;font-size:.9rem}.row{displa
 table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid #eee}td.owes,#grand-total{font-weight:700}
 .check{color:#666;font-size:.9rem}pre{background:#f0efe9;padding:10px;border-radius:8px;white-space:pre-wrap;min-height:1em}
 footer{max-width:760px;margin:auto;padding:10px 20px 40px;color:#666;font-size:.9rem}a{color:#0a7d55}
+button.remove{background:#fff;color:#a52828;border:1px solid #e3b4b4;padding:3px 10px;font-size:.85rem;margin-left:8px}button.remove:hover{background:#fbeaea}
+.error{color:#a52828;margin:4px 0 0;font-size:.9rem;min-height:1em}
