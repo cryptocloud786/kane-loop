@@ -5,14 +5,24 @@ const money = c => (c / 100).toFixed(2);
 function renderPeople() {
   $('people').innerHTML = state.people.map(p => `<li>${esc(p)}</li>`).join('');
   const fs = $('sharers');
-  fs.innerHTML = '<legend>Shared by</legend>' + (state.people.length
-    ? state.people.map(p => `<label class="chk"><input type="checkbox" name="sharer" value="${esc(p)}" checked> ${esc(p)}</label>`).join('')
+  fs.innerHTML = '<legend>Shared by (tick everyone who shared it)</legend>' + (state.people.length
+    // Kane iteration 2 (flow 03): pre-ticked boxes made "shared by both" ambiguous (clicking a name UN-ticked it).
+    // Boxes now start unticked: tick exactly the people who shared the item.
+    ? state.people.map(p => `<label class="chk"><input type="checkbox" name="sharer" value="${esc(p)}"> ${esc(p)}</label>`).join('') + '<p id="share-error" class="error" role="alert"></p>'
     : '<p class="hint">Add people first.</p>');
 }
 function renderItems() {
-  $('items').innerHTML = state.items.map(it =>
-    `<li><strong>${esc(it.name)}</strong> ${Number(it.price).toFixed(2)} <span class="who">shared by ${it.sharedBy.map(esc).join(', ')}</span></li>`).join('');
+  // v1.1 (Kane flow 03): every item gets a Remove button; totals recalculate immediately.
+  $('items').innerHTML = state.items.map((it, i) =>
+    `<li><strong>${esc(it.name)}</strong> ${Number(it.price).toFixed(2)} <span class="who">shared by ${it.sharedBy.map(esc).join(', ')}</span>` +
+    ` <button type="button" class="remove" data-index="${i}" aria-label="Remove ${esc(it.name)}">Remove</button></li>`).join('');
 }
+$('items').addEventListener('click', e => {
+  const btn = e.target.closest('button.remove');
+  if (!btn) return;
+  state.items.splice(Number(btn.dataset.index), 1);
+  renderItems(); renderTotals();
+});
 function renderTotals() {
   const { rows, total } = splitBill(state.people, state.items, $('tax').value, $('tip').value);
   $('totals').querySelector('tbody').innerHTML = rows.map(r =>
@@ -37,7 +47,8 @@ $('item-form').addEventListener('submit', e => {
   const sharedBy = [...document.querySelectorAll('input[name=sharer]:checked')].map(i => i.value);
   const name = $('item-name').value.trim();
   const price = $('item-price').value;
-  if (!name || price === '' || !sharedBy.length) return;
+  if (!sharedBy.length) { const er = $('share-error'); if (er) er.textContent = 'Tick at least one person who shared this item.'; return; }
+  if (!name || price === '') return;
   state.items.push({ name, price: Number(price), sharedBy });
   $('item-name').value = ''; $('item-price').value = '';
   renderPeople(); renderItems(); renderTotals();
